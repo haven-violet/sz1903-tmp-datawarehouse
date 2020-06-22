@@ -1,0 +1,66 @@
+{
+  "job": {
+    "setting": {
+      "speed": {
+        "channel": 3
+      },
+      "errorLimit": {
+        "record": 0,
+        "percentage": 0.02
+      }
+    },
+    "content": [
+      {
+        "reader": {
+          "name": "mysqlreader",
+          "parameter": {
+            "username": "root",
+            "password": "root",
+            "column": [
+              "user_id",
+              "user_pass",
+              "ctime"
+            ],
+            "splitPk": "user_id",
+            "connection": [
+              {
+                "table": [
+                  "users"
+                ],
+                "jdbcUrl": [
+                  "jdbc:mysql://10.36.142.3:3306/sz1903_dmp_datawarehouse"
+                ]
+              }
+            ]
+          }
+        },
+        "writer": {
+          "name": "hdfswriter",
+          "parameter": {
+            "defaultFS": "hdfs://hadoop201:9000",
+            "fileType": "text",
+            "path": "/data/release1903/ods/release_user",
+            "fileName": "ods_release1903.ods_02_release_user",
+            "column": [
+              {
+                "name": "user_id",
+                "type": "string"
+              },
+              {
+                "name": "user_pass",
+                "type": "string"
+              },
+              {
+                "name": "ctime",
+                "type": "string"
+              }
+            ],
+            "writeMode": "overwrite",
+            "fieldDelimiter": ",",
+            "compress":"NONE"
+          }
+        }
+      }
+    ]
+  }
+}
