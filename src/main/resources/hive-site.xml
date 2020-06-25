@@ -1,0 +1,31 @@
+<configuration>
+	<!--配置mysql的连接字符串-->
+	<property>
+		<name>javax.jdo.option.ConnectionURL</name>
+		<value>jdbc:mysql://hadoop201:3306/hive?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=UTF-8</value>
+		<description>JDBC connect string for a JDBC metastore</description>
+	</property>
+	<!--配置mysql的连接驱动-->
+	<property>
+		<name>javax.jdo.option.ConnectionDriverName</name>
+		<value>com.mysql.jdbc.Driver</value>
+		<description>Driver class name for a JDBC metastore</description>
+	</property>
+	<!--配置登录mysql的用户-->
+	<property>
+		<name>javax.jdo.option.ConnectionUserName</name>
+		<value>root</value>
+		<description>username to use against metastore database</description>
+	</property>
+	<!--配置登录mysql的密码-->
+	<property>
+		<name>javax.jdo.option.ConnectionPassword</name>
+		<value>root</value>
+		<description>password to use against metastore database</description>
+	</property>
+	<!-- 配置json三方包 -->
+	<property>
+		<name>hive.aux.jars.path</name>
+		<value>/opt/app/hive/lib/</value>
+	</property>
+</configuration>

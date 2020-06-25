@@ -37,7 +37,7 @@ create external table if not exists ods_release1903.ods_01_release_session
 -- (2)load data inpath hdfs文件 move 到hdfs对应hive表中的目录下
 -- hdfs dfs -mkdir ttt
 -- hdfs dfs -put  /opt/file/15603638400003h4gka4h /ttt
-load data inpath '/ttt' overwrite into table ods_release1903.ods_01_release_session
+load data inpath '/data/release1903/ods/release_session/bdp_day=20200623' overwrite into table ods_release1903.ods_01_release_session
     partition (bdp_day="20200622");
 
 -- 3.检查
@@ -189,5 +189,4 @@ select * from ods_release1903.ods_02_release_sources_mapping_channels limit 10;
 show databases;
 /**
   TODO
-
  */

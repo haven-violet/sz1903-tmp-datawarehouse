@@ -8,7 +8,7 @@ TODO
  */
 /*
  sss
-    目标客户主题
+    主题
  */
 use ods_release1903;
 select * from ods_release1903.ods_01_release_session limit 10;
@@ -68,10 +68,26 @@ select release_session,
        get_json_object(exts, '$.model_version') as model_version,
        get_json_object(exts, '$.aid') as aid,
        ct
-from ods_release1903.ods_01_release_session;
+from ods_release1903.ods_01_release_session
+where
+      release_status = '01'
+      and
+      bdp_day = '20200622'
+;
+set hive.exec.mode.local.auto=true;
+select count(1) from ods_release1903.ods_01_release_session;
+select * from ods_release1903.ods_01_release_session limit 10;
+-- 332923
+drop table ods_release1903.ods_01_release_session;
+drop table dw_release1903.dw_release_customer;
 
+select count(1)
+from dw_release1903.dw_release_customer;
+
+
+select count(1) from dw_release1903.dw_release_customer;
 select * from dw_release1903.dw_release_customer limit 10;
-
+select * from ods_release1903.ods_01_release_session limit 10;
 -- sss from_unixtime(unix_timestamp(), 'yyyy') - regexp_extract(get_json_object(exts, '$.idcard'), '(\\d{6})(\\d{4})', 2) as age
 /*
  sss
@@ -153,3 +169,6 @@ select
 from tab1 group by area,city,day with cube;
 
 set hive.exec.mode.local.auto=true;
+
+-- 85785
+select count(1) from dw_release1903.dw_release_customer;

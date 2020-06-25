@@ -194,10 +194,25 @@ object demoTest {
          |  sum(counts)
          |from tab1 group by area,city,day with cube
        """.stripMargin).show()
-
-
+/*
+具体应用场景
+举个例子
+比如大学 每个学校都有很多系
+建筑-信息: 软件, 计算机
+软件: 班级1 班级2
+计算机: 班级1 班级2
+需求: 需要按照不同级别统计学生人数
+系   专业  班级  学生人数
+信息
+      软件
+            班级1
+            班级2
+信息
+      计算机
+            班级1
+            班级2
+ */
 
   }
 }
-
 case class NumberNames(area:String, city:String, day:String, counts:Int)
