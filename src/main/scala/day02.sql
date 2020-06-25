@@ -172,3 +172,110 @@ set hive.exec.mode.local.auto=true;
 
 -- 85785
 select count(1) from dw_release1903.dw_release_customer;
+
+
+
+
+/*
+ sss 曝光主题
+ */
+create external table if not exists dw_release1903.dw_release_exposure
+(
+    release_session string comment '投放会话id',
+    release_status  string comment '参考下面投放流程状态说明',
+    device_num      string comment '设备唯一编码',
+    device_type     string comment '1 android| 2 ios | 9 其他',
+    sources         string comment '渠道',
+    channels        string comment '通道',
+    ct              bigint comment '创建时间'
+) partitioned by (bdp_day string)
+    stored as parquet
+    location '/data/release1903/dw/release_exposure/';
+
+
+//曝光主题sql实现
+insert into table dw_release1903.dw_release_exposure partition (bdp_day="20200622")
+select release_session,
+       release_status,
+       device_num,
+       device_type,
+       sources,
+       channels,
+       ct
+from ods_release1903.ods_01_release_session
+where release_status = '03'
+  and bdp_day = "20200622";
+
+select * from dw_release1903.dw_release_exposure limit 20;
+
+
+/**
+  sss 注册主题
+ */
+create external table if not exists dw_release1903.dw_release_register_users
+(
+    user_id         string COMMENT '用户id：手机号',
+    release_session string comment '投放会话id',
+    release_status  string comment '参考下面投放流程状态说明',
+    device_num      string comment '设备唯一编码',
+    device_type     string comment '1 android| 2 ios | 9 其他',
+    sources         string COMMENT '渠道',
+    channels        string COMMENT '通道',
+    ctime           bigint COMMENT '创建时间'
+)
+    partitioned by (bdp_day string)
+    stored as parquet
+    location '/data/release1903/dw/release_register_user/';
+
+//注册用户主题sql实现
+insert into table dw_release1903.dw_release_register_users partition (bdp_day="20200622")
+select
+    get_json_object(exts, '$.user_register') as user_register,
+    release_session,
+    release_status,
+    device_num,
+    device_type,
+    sources,
+    channels,
+    ct
+from ods_release1903.ods_01_release_session
+where  release_status = '06'
+and bdp_day = "20200622";
+
+select * from dw_release1903.dw_release_register_users limit 10;
+
+
+
+/**
+  sss 点击主题
+ */
+create external table if not exists dw_release1903.dw_release_click
+(
+    release_session string comment '投放会话id',
+    release_status  string comment '参考下面投放流程状态说明',
+    device_num      string comment '设备唯一编码',
+    device_type     string comment '1 android| 2 ios | 9 其他',
+    sources         string comment '渠道',
+    channels        string comment '通道',
+    ct              bigint comment '创建时间'
+) partitioned by (bdp_day string)
+    stored as parquet
+    location '/data/release1903/dw/release_click/';
+
+insert overwrite table  dw_release1903.dw_release_click partition (bdp_day = "20200622")
+select
+    release_session,
+    release_status,
+    device_num,
+    device_type,
+    sources,
+    channels,
+    ct
+from ods_release1903.ods_01_release_session
+where release_status = '04'
+and bdp_day = "20200622" ;
+
+select count(1) from dw_release1903.dw_release_click;
+set hive.exec.mode.local.auto=true;
+
+
