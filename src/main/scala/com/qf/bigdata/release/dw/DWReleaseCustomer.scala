@@ -29,7 +29,7 @@ object DWReleaseCustomer {
       import spark.implicits._
       import org.apache.spark.sql.functions._
       //获取日志字段
-      val customerColumns = DWReleaseCustomerHelper.selectDWReleaseCustomerColumns()
+      val customerColumns = DWReleaseColumnsHelper.selectDWReleaseCustomerColumns()
       //使用DSL风格编写代码
       //按照条件查询ODS层数据
       val customerReleaseCondition = (
@@ -78,8 +78,12 @@ object DWReleaseCustomer {
         .setMaster("local[*]")
       //初始化spark上下文
       spark = SparkHelper.createSpark(conf)
+      //处理时间格式和多天任务
+      val days = SparkHelper.rangeDates(bdp_day_begin, bdp_day_end)
       //处理原始数据(注意: 传入的时间参数还需要处理,等到后面处理)
-      handleReleaseJob(spark, appName, bdp_day_end)
+      for(day <- days){
+        handleReleaseJob(spark, appName, day)
+      }
     }catch {
       case ex:Exception => {
         println("程序出错, 退出~~~")
@@ -104,6 +108,5 @@ object DWReleaseCustomer {
     handleJobs(appName, bdp_day_begin, bdp_day_end)
     val end = System.currentTimeMillis()
     println(s"appName = [${appName}], begin = $begin, use = ${end - begin}")
-
   }
 }

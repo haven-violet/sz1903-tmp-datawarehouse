@@ -31,7 +31,7 @@ create external table if not exists ods_release1903.ods_01_release_session
 ) partitioned by (bdp_day string)
     stored as parquet
     location '/data/release1903/ods/release_session/';
-
+8
 -- 2.导入日志数据到hive表中
 -- (1)load data local inpath 本地文件 copy 一份到hdfs
 -- (2)load data inpath hdfs文件 move 到hdfs对应hive表中的目录下

@@ -10,7 +10,7 @@ import scala.collection.mutable.ArrayBuffer
   * @Version 1.0
   * @Description
   */
-object DWReleaseCustomerHelper {
+object DWReleaseColumnsHelper {
   def selectDWReleaseCustomerColumns() = {
     var columns = ArrayBuffer[String]()
     columns.+=("release_session")
